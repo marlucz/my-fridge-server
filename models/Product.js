@@ -4,7 +4,7 @@ const { model, Schema } = require('mongoose');
 const productSchema = new Schema({
     name: String,
     username: String,
-    boughtAt: String,
+    createdAt: String,
     expires: String,
     category: [
         {
