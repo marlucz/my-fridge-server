@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 module.exports.validateRegisterInput = (
     username,
     email,
@@ -26,4 +28,33 @@ module.exports.validateRegisterInput = (
         errors,
         valid: Object.keys(errors).length < 1,
     };
+};
+
+module.exports.validateLoginInput = (username, password) => {
+    const errors = {};
+    if (username.trim() === '') {
+        errors.username = `You must provide username`;
+    }
+    if (password === '') {
+        errors.password = 'You must provide a password';
+    }
+
+    return {
+        errors,
+        valid: Object.keys(errors).length < 1,
+    };
+};
+
+module.exports.generateToken = user => {
+    return jwt.sign(
+        {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: '1h',
+        },
+    );
 };
