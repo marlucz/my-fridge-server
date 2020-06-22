@@ -16,12 +16,20 @@ module.exports = gql`
         token: String!
     }
 
+    type Tag {
+        id: ID!
+        name: String!
+        username: String!
+        products: [String]
+    }
+
     type Product {
         id: ID!
         name: String!
         username: String!
         createdAt: String!
         expires: String!
+        tags: [String]!
     }
 
     type Query {
@@ -33,7 +41,13 @@ module.exports = gql`
     type Mutation {
         register(registerInput: RegisterInput): User!
         login(username: String!, password: String!): User!
-        createProduct(name: String!, expires: String!): Product!
+        createProduct(
+            name: String!
+            expires: String!
+            tags: [String!]
+        ): Product!
         deleteProduct(productId: ID!): String!
+        createTag(name: String!): Tag!
+        deleteTag(tagId: ID!): String!
     }
 `;
