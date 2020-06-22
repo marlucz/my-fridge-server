@@ -20,7 +20,7 @@ module.exports = gql`
         id: ID!
         name: String!
         username: String!
-        products: [String]
+        products: [Product]!
     }
 
     type Product {
@@ -29,25 +29,23 @@ module.exports = gql`
         username: String!
         createdAt: String!
         expires: String!
-        tags: [String]!
+        tag: String!
     }
 
     type Query {
+        getUsers: [User]
         getProducts: [Product]
         getProduct(productId: ID!): Product!
-        getUsers: [User]
+        getTags: [Tag]
+        getProductsByTag(tagId: ID!): [Product]
     }
 
     type Mutation {
         register(registerInput: RegisterInput): User!
         login(username: String!, password: String!): User!
-        createProduct(
-            name: String!
-            expires: String!
-            tags: [String!]
-        ): Product!
-        deleteProduct(productId: ID!): String!
         createTag(name: String!): Tag!
         deleteTag(tagId: ID!): String!
+        createProduct(name: String!, expires: String!, tag: String!): Product!
+        deleteProduct(productId: ID!, tag: String!): String!
     }
 `;

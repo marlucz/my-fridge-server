@@ -4,7 +4,29 @@ const Tag = require('../../models/Tag');
 const auth = require('../../utils/auth');
 
 module.exports = {
-    Query: {},
+    Query: {
+        async getTags() {
+            try {
+                // eslint-disable
+                const tags = await Tag.find().populate('products');
+                return tags;
+            } catch (err) {
+                throw new Error(err);
+            }
+        },
+        async getProductsByTag(_, { tagId }) {
+            try {
+                const tag = await Tag.findById(tagId).populate('products');
+                if (tag) {
+                    const { products } = tag;
+                    return products;
+                }
+                throw new Error('Tag not found');
+            } catch (err) {
+                throw new Error(err);
+            }
+        },
+    },
     Mutation: {
         async createTag(_, { name }, context) {
             const user = auth(context);

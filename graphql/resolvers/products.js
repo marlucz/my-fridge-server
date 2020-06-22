@@ -1,6 +1,7 @@
-const { AuthenticationError } = require('apollo-server');
+const { AuthenticationError, UserInputError } = require('apollo-server');
 
 const Product = require('../../models/Product');
+const Tag = require('../../models/Tag');
 const auth = require('../../utils/auth');
 
 module.exports = {
@@ -26,19 +27,27 @@ module.exports = {
         },
     },
     Mutation: {
-        async createProduct(_, { name, expires }, context) {
+        async createProduct(_, { name, expires, tag }, context) {
             const user = auth(context);
 
-            const newProduct = new Product({
-                name,
-                user: user.id,
-                username: user.username,
-                createdAt: new Date().toISOString(),
-                expires,
-            });
+            const existingTag = await Tag.findOne({ name: tag });
 
-            const product = await newProduct.save();
-            return product;
+            if (existingTag) {
+                const tagId = existingTag._id;
+
+                const newProduct = new Product({
+                    name,
+                    user: user.id,
+                    username: user.username,
+                    createdAt: new Date().toISOString(),
+                    expires,
+                    tag: tagId,
+                });
+
+                const product = await newProduct.save();
+                return product;
+            }
+            throw new UserInputError(`This tag does not exits`);
         },
 
         async deleteProduct(_, { productId }, context) {
