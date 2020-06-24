@@ -4,6 +4,8 @@ const { model, Schema } = require('mongoose');
 const productSchema = new Schema(
     {
         name: String,
+        quantity: Number,
+        unit: String,
         username: String,
         createdAt: String,
         expires: String,

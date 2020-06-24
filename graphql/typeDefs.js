@@ -8,6 +8,14 @@ module.exports = gql`
         email: String!
     }
 
+    input ProductInput {
+        name: String!
+        quantity: Float!
+        unit: String!
+        expires: String!
+        tag: String!
+    }
+
     type User {
         id: ID!
         username: String!
@@ -26,6 +34,8 @@ module.exports = gql`
     type Product {
         id: ID!
         name: String!
+        quantity: Float!
+        unit: String!
         username: String!
         createdAt: String!
         expires: String!
@@ -45,7 +55,7 @@ module.exports = gql`
         login(username: String!, password: String!): User!
         createTag(name: String!): Tag!
         deleteTag(tagId: ID!): String!
-        createProduct(name: String!, expires: String!, tag: String!): Product!
-        deleteProduct(productId: ID!, tag: String!): String!
+        createProduct(productInput: ProductInput): Product!
+        deleteProduct(productId: ID!, quantity: Float!): String!
     }
 `;

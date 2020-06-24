@@ -27,7 +27,11 @@ module.exports = {
         },
     },
     Mutation: {
-        async createProduct(_, { name, expires, tag }, context) {
+        async createProduct(
+            _,
+            { productInput: { name, quantity, unit, expires, tag } },
+            context,
+        ) {
             const user = auth(context);
 
             const existingTag = await Tag.findOne({ name: tag });
@@ -37,6 +41,8 @@ module.exports = {
 
                 const newProduct = new Product({
                     name,
+                    quantity,
+                    unit,
                     user: user.id,
                     username: user.username,
                     createdAt: new Date().toISOString(),
@@ -50,14 +56,20 @@ module.exports = {
             throw new UserInputError(`This tag does not exits`);
         },
 
-        async deleteProduct(_, { productId }, context) {
+        async deleteProduct(_, { productId, quantity }, context) {
             const user = auth(context);
 
             try {
                 const product = await Product.findById(productId);
                 if (user.username === product.username) {
-                    await product.delete();
-                    return 'Product deleted successfully';
+                    if (quantity >= product.quantity) {
+                        await product.delete();
+                        return 'Product deleted successfully';
+                    }
+                    const newQuantity = product.quantity - quantity;
+                    await product.update({ quantity: newQuantity });
+
+                    return 'Product updated successfully';
                 }
                 throw new AuthenticationError('Action not allowed');
             } catch (err) {
