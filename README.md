@@ -2,7 +2,7 @@
 
 > Fullstack project with Node.js, Apollo-Server, GraphQL and MongoDB. Backend side of the application allows to store data about all the products that you have in your fridge, catgorized by tags and keep an eye on the expiration date of them.
 
-[Client side code for the project - Not yet written]()
+[Client side code for the project](https://github.com/marlucz/my-fridge-client)
 
 ## Backend Technologies
 
