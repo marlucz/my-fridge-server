@@ -5,10 +5,13 @@ const auth = require('../../utils/auth');
 
 module.exports = {
     Query: {
-        async getTags() {
+        // eslint-disable-next-line no-empty-pattern
+        async getTags(_, {}, context) {
+            const { username } = auth(context);
+
             try {
                 // eslint-disable
-                const tags = await Tag.find().populate('products');
+                const tags = await Tag.find({ username }).populate('products');
                 return tags;
             } catch (err) {
                 throw new Error(err);

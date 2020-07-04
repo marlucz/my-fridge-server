@@ -6,9 +6,14 @@ const auth = require('../../utils/auth');
 
 module.exports = {
     Query: {
-        async getProducts() {
+        // eslint-disable-next-line no-empty-pattern
+        async getProducts(_, {}, context) {
+            const { username } = auth(context);
+
             try {
-                const products = await Product.find().sort({ createdAt: -1 });
+                const products = await Product.find({ username }).sort({
+                    createdAt: -1,
+                });
                 return products;
             } catch (err) {
                 throw new Error(err);
