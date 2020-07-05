@@ -17,9 +17,14 @@ module.exports = {
                 throw new Error(err);
             }
         },
-        async getProductsByTag(_, { tagId }) {
+        async getProductsByTag(_, { tagId }, context) {
+            const { username } = auth(context);
+
             try {
-                const tag = await Tag.findById(tagId).populate('products');
+                const tag = await Tag.findOne({
+                    username,
+                    _id: tagId,
+                }).populate('products');
                 if (tag) {
                     const { products } = tag;
                     return products;

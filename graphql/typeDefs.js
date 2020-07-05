@@ -45,6 +45,7 @@ module.exports = gql`
     type Query {
         getUsers: [User]
         getProducts: [Product]
+        getProductsExpired: [Product]
         getProduct(productId: ID!): Product!
         getTags: [Tag]
         getProductsByTag(tagId: ID!): [Product]

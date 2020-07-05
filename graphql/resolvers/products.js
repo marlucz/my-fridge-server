@@ -19,9 +19,33 @@ module.exports = {
                 throw new Error(err);
             }
         },
-        async getProduct(_, { productId }) {
+        // eslint-disable-next-line no-empty-pattern
+        async getProductsExpired(_, {}, context) {
+            const { username } = auth(context);
+
             try {
-                const product = await Product.findById(productId);
+                const products = await Product.find({
+                    username,
+                    expires: { $lt: new Date(Date.now()).toISOString() },
+                }).sort({
+                    createdAt: -1,
+                });
+                if (products) {
+                    return products;
+                }
+                throw new Error('Product not found');
+            } catch (err) {
+                throw new Error(err);
+            }
+        },
+        async getProduct(_, { productId }, context) {
+            const { username } = auth(context);
+
+            try {
+                const product = await Product.findOne({
+                    username,
+                    _id: productId,
+                });
                 if (product) {
                     return product;
                 }
