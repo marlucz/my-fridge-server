@@ -47,7 +47,10 @@ module.exports = {
                 });
             }
 
-            const existingTag = await Tag.findOne({ name: name.toLowerCase() });
+            const existingTag = await Tag.findOne({
+                username: user.username,
+                name: name.toLowerCase(),
+            });
 
             if (existingTag) {
                 throw new UserInputError(
@@ -64,6 +67,7 @@ module.exports = {
                 name: name.toLowerCase(),
                 user: user.id,
                 username: user.username,
+                products: [],
             });
 
             const tag = await newTag.save();
