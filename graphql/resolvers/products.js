@@ -63,7 +63,7 @@ module.exports = {
         ) {
             const user = auth(context);
 
-            const existingTag = await Tag.findOne({ name: tag });
+            const existingTag = await Tag.findById(tag);
 
             if (existingTag) {
                 const tagId = existingTag._id;

@@ -13,7 +13,7 @@ module.exports = gql`
         quantity: Float!
         unit: String!
         expires: String!
-        tag: String!
+        tag: ID!
     }
 
     type User {
@@ -39,7 +39,7 @@ module.exports = gql`
         username: String!
         createdAt: String!
         expires: String!
-        tag: String!
+        tag: ID!
     }
 
     type Query {
