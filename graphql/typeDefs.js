@@ -57,6 +57,7 @@ module.exports = gql`
         createTag(name: String!): Tag!
         deleteTag(tagId: ID!): String!
         createProduct(productInput: ProductInput): Product!
-        deleteProduct(productId: ID!, quantity: Float!): String!
+        deleteProduct(productId: ID!): String!
+        consumeProduct(productId: ID!, quantity: Float!): Product!
     }
 `;

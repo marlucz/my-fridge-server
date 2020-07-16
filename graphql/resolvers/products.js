@@ -85,20 +85,37 @@ module.exports = {
             throw new UserInputError(`This tag does not exits`);
         },
 
-        async deleteProduct(_, { productId, quantity }, context) {
+        async deleteProduct(_, { productId }, context) {
             const user = auth(context);
 
             try {
                 const product = await Product.findById(productId);
                 if (user.username === product.username) {
-                    if (quantity >= product.quantity) {
-                        await product.delete();
-                        return 'Product deleted successfully';
-                    }
-                    const newQuantity = product.quantity - quantity;
-                    await product.update({ quantity: newQuantity });
+                    await product.delete();
+                    return 'Product deleted successfully';
+                }
+                throw new AuthenticationError('Action not allowed');
+            } catch (err) {
+                throw new Error(err);
+            }
+        },
+        async consumeProduct(_, { productId, quantity }, context) {
+            const user = auth(context);
 
-                    return 'Product updated successfully';
+            try {
+                const product = await Product.findById(productId);
+
+                if (user.username === product.username) {
+                    const updatedProduct = await Product.findByIdAndUpdate(
+                        productId,
+                        {
+                            $inc: {
+                                quantity: -quantity,
+                            },
+                        },
+                    );
+
+                    return updatedProduct;
                 }
                 throw new AuthenticationError('Action not allowed');
             } catch (err) {
