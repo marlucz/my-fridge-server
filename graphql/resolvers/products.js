@@ -113,8 +113,8 @@ module.exports = {
                                 quantity: -quantity,
                             },
                         },
+                        { new: true },
                     );
-
                     return updatedProduct;
                 }
                 throw new AuthenticationError('Action not allowed');
