@@ -26,7 +26,8 @@
     "graphql": "^15.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.19",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "shortid": "^2.2.15"
   },
   "browserslist": {
     "production": [

@@ -14,6 +14,7 @@ module.exports = gql`
         unit: String!
         expires: String!
         tag: ID!
+        image: Upload
     }
 
     type User {
@@ -38,8 +39,15 @@ module.exports = gql`
         unit: String!
         username: String!
         createdAt: String!
+        photo: Photo
         expires: String!
         tag: ID!
+    }
+
+    type Photo {
+        filename: String!
+        mimetype: String!
+        path: String!
     }
 
     type Query {
