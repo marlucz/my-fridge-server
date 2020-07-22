@@ -9,6 +9,11 @@ const productSchema = new Schema(
         username: String,
         createdAt: String,
         expires: String,
+        photo: {
+            filename: String,
+            mimetype: String,
+            path: String,
+        },
         user: {
             type: Schema.Types.ObjectId,
             ref: 'User',
