@@ -61,7 +61,7 @@ module.exports = {
     Mutation: {
         async createProduct(
             _,
-            { productInput: { name, quantity, unit, expires, tag, image } },
+            { productInput: { name, quantity, unit, expires, tag, file } },
             context,
         ) {
             // check for user auth token
@@ -73,12 +73,15 @@ module.exports = {
             if (existingTag) {
                 const tagId = existingTag._id;
 
-                // create dir for photo
-                mkdir('images', { recursive: true }, err => {
-                    if (err) throw err;
-                });
+                let upload = null;
 
-                const upload = await processUpload(image);
+                if (file) {
+                    // create dir for photo
+                    mkdir('images', { recursive: true }, err => {
+                        if (err) throw err;
+                    });
+                    upload = await processUpload(file);
+                }
 
                 const newProduct = new Product({
                     name,
@@ -87,7 +90,7 @@ module.exports = {
                     user: user.id,
                     username: user.username,
                     createdAt: new Date().toISOString(),
-                    photo: upload,
+                    image: upload,
                     expires,
                     tag: tagId,
                 });
