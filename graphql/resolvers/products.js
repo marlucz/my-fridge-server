@@ -1,8 +1,11 @@
 const { AuthenticationError, UserInputError } = require('apollo-server');
 
+const { mkdir } = require('fs');
 const Product = require('../../models/Product');
 const Tag = require('../../models/Tag');
+
 const auth = require('../../utils/auth');
+const { processUpload } = require('../../utils/photoUpload');
 
 module.exports = {
     Query: {
@@ -58,15 +61,27 @@ module.exports = {
     Mutation: {
         async createProduct(
             _,
-            { productInput: { name, quantity, unit, expires, tag } },
+            { productInput: { name, quantity, unit, expires, tag, file } },
             context,
         ) {
+            // check for user auth token
             const user = auth(context);
 
+            // check if there is tag user want to create product in
             const existingTag = await Tag.findById(tag);
 
             if (existingTag) {
                 const tagId = existingTag._id;
+
+                let upload = null;
+
+                if (file) {
+                    // create dir for photo
+                    mkdir('images', { recursive: true }, err => {
+                        if (err) throw err;
+                    });
+                    upload = await processUpload(file);
+                }
 
                 const newProduct = new Product({
                     name,
@@ -75,6 +90,7 @@ module.exports = {
                     user: user.id,
                     username: user.username,
                     createdAt: new Date().toISOString(),
+                    image: upload,
                     expires,
                     tag: tagId,
                 });
