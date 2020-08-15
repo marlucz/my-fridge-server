@@ -9,7 +9,7 @@ const productSchema = new Schema(
         username: String,
         createdAt: String,
         expires: String,
-        photo: {
+        image: {
             filename: String,
             mimetype: String,
             path: String,
