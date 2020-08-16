@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-const { UserInputError } = require('apollo-server');
+const { UserInputError } = require('apollo-server-express');
 
 const {
     validateRegisterInput,
@@ -23,9 +23,8 @@ module.exports = {
     Mutation: {
         async register(
             _,
-            { registerInput: { username, email, password, passwordConfirm } }, // context,
-        ) // info,
-        {
+            { registerInput: { username, email, password, passwordConfirm } }, // context, // info,
+        ) {
             // validate input data
             const { errors, valid } = validateRegisterInput(
                 username,
