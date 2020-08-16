@@ -76,14 +76,14 @@ module.exports = {
             if (existingTag) {
                 const tagId = existingTag._id;
 
-                let upload = null;
+                let image = null;
 
                 if (file) {
                     // create dir for photo
                     mkdir('images', { recursive: true }, err => {
                         if (err) throw err;
                     });
-                    upload = await processUpload(file);
+                    image = await processUpload(file);
                 }
 
                 const newProduct = new Product({
@@ -93,7 +93,7 @@ module.exports = {
                     user: user.id,
                     username: user.username,
                     createdAt: new Date().toISOString(),
-                    image: upload,
+                    image,
                     expires,
                     tag: tagId,
                 });

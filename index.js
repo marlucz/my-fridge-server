@@ -18,11 +18,9 @@ const server = new ApolloServer({
     context: ({ req }) => ({ req }),
 });
 
-const dir = path.join(process.cwd(), 'images');
-app.use('/images', express.static(dir)); // serve all files in the /images directory
+app.use('/images', express.static(path.join(__dirname, '/images'))); // serve all files in the /images directory
 app.use(cors('*')); // All Cross-origin resource sharing from any network
 server.applyMiddleware({ app }); // apply express as a graphql middleware
-// server.listen(4000, () => {
 
 mongoose
     .connect(process.env.MONGODB, {
